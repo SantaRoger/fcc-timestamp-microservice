@@ -35,15 +35,14 @@ app.get("/api/timestamp/:userTimestamp?", function(req,res){
   let momentTime;
   if(/\d{5,}/.test(userTime)) {
     momentTime = moment(parseInt(userTime));
-    response.unix = momentTime.unix()*1000;
   } else {
     if(new Date(userTime).toString() === 'Invalid Date') {
       response.error = 'Invlalid Date';
       return res.json(response);
     }
     momentTime = moment(userTime);
-    response.unix = momentTime.unix();
   }
+  response.unix = momentTime.unix()*1000;
   momentTime.utc();
   response.utc = momentTime.toString();
   res.json(response);
