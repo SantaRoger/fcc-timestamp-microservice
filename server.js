@@ -44,7 +44,7 @@ app.get("/api/timestamp/:userTimestamp?", function(req,res){
   }
   response.unix = momentTime.unix()*1000;
   momentTime.utc();
-  response.utc = momentTime.toString();
+  response.utc = momentTime.toDate().toUTCString();
   res.json(response);
 });
 
