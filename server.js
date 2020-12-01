@@ -25,14 +25,28 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
-app.get("/api/timestamp/:userTimestamp", function(req,res){
-  const userTime = req.params.userTimestamp;
-  const momentTime = isNaN(+userTime) ?  moment(userTime) : moment.unix(+userTime);
-  res.json({
-    unix: momentTime.unix(),
-    utc: momentTime.utc(),
-  });
-
+app.get("/api/timestamp/:userTimestamp?", function(req,res){
+  let response = {
+    unix:'',
+    utc: '',
+    error: '',
+  }
+  const userTime = req.params.userTimestamp || new Date();
+  let momentTime;
+  if(/\d{5,}/.test(userTime)) {
+    momentTime = moment(parseInt(userTime));
+    response.unix = momentTime.unix()*1000;
+  } else {
+    if(new Date(userTime).toString() === 'Invalid Date') {
+      response.error = 'Invlalid Date';
+      return res.json(response);
+    }
+    momentTime = moment(userTime);
+    response.unix = momentTime.unix();
+  }
+  momentTime.utc();
+  response.utc = momentTime.toString();
+  res.json(response);
 });
 
 
