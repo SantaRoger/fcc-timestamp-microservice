@@ -37,10 +37,11 @@ app.get("/api/timestamp/:userTimestamp?", function(req,res){
     momentTime = moment(parseInt(userTime));
   } else {
     if(new Date(userTime).toString() === 'Invalid Date') {
-      response.error = 'Invlalid Date';
+      response.error = 'Invalid Date';
       return res.json(response);
     }
-    momentTime = moment(userTime);
+    
+    momentTime = moment(new Date(userTime));
   }
   response.unix = momentTime.unix()*1000;
   momentTime.utc();
